@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:cxf="http://camel.apache.org/schema/cxf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd        http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd        ">
+    <camelContext id="kub" xmlns="http://camel.apache.org/schema/spring">
+        <route id="http-receiver">
+            <from id="http-receiver-starter" uri="servlet://ping"/>
+            <setHeader headerName="Content-Type" id="_setHeader1">
+                <constant>application/json</constant>
+            </setHeader>
+            <throttle id="_throttle1">
+                <method ref="throttlingInfoBean" method="getLocalThrottlingCallsPerSec"/>
+                <log id="_log1" message="Processing.."/>
+                <setBody>
+                <simple>throttling at ${bean:throttlingInfoBean?method=getLocalThrottlingCallsPerSec} calls per sec.</simple>
+                </setBody>
+            </throttle>
+        </route>
+        <route id="_route1">
+            <from id="_from1" uri="timer:foo?period=5000"/>
+            <bean id="_bean1" method="refreshThrottlingInfo" ref="throttlingInfoBean"/>
+            <log id="_log2" message="Throttling is at ${body}"/>
+        </route>
+    </camelContext>
+</beans>
