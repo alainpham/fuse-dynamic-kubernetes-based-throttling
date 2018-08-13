@@ -2,8 +2,7 @@ Camel Spring Boot Project uc1-fuse-dynamic-kubernetes-based-throttling
 ===========================
 
 Sometimes it is required to create projects that are aware of the numbers of PODS running in a Kubernetes Cluster.
-This example shows how to get the current number of running PODS to adjust throttling rate dynamically.
-
+This example shows how to get the current number of running PODS from kubernetes using the spring-cloud-kubernetes-core to adjust throttling rate dynamically.
 
 To build this project use
 
